@@ -24,6 +24,8 @@ def JPG2GRAY(source_Dir, new_Dir):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # 保存图片
         cv2.imwrite(os.path.join(new_Dir, filename), img)
+        # 保存为npy文件(保存为jpg等图片文件时，会自动生成RGB通道，导致灰度图通道数为3，npy则不会产生这种问题）
+        # np.save(os.path.join(new_Dir,filename),img)
 
         print('处理成功')
         
