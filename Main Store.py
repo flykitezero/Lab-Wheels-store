@@ -10,7 +10,7 @@ def JPG2GRAY(source_Dir, new_Dir):
     :param new_Dir: 保存的路径  
     :return:无  
 
-    ···
+
     # 判断是否存在保存路径，不存在则新建
     if not os.path.exists(new_Dir):
         os.makedirs(new_Dir)
@@ -28,7 +28,6 @@ def JPG2GRAY(source_Dir, new_Dir):
         # np.save(os.path.join(new_Dir,filename),img)
 
         print('处理成功')
-
         
         
 # --------------------------------------        
@@ -56,30 +55,39 @@ def Sobel(im):
     edge_detect = F.conv2d(Variable(im), weight)
 
     return edge_detect
-    
-    
+
 # --------------------------------------        
-提交人：SZ  
-功能简介：梯度直方图计算函数
-特殊导入包：import cv2
-提交日期：2021/8/3
-# ------------------------------------------------  
-def  gen_Gradient(img):
+提交人：ML
+功能简介：Canny边缘检测 
+特殊导入包：
+from image_utils import *
+from matplotlib import pyplot as plt
+import cv2 as cv
+提交日期：2021/8/3  
+# ------------------------------------------------ 
+def canny_edge(image):
     '''
-    梯度直方图计算
-    :param img: 输入3通道的图片
-    :return: magnitude:梯度直方图
+    Canny边缘检测
+    :param im:输入1通道的图片
+    :return:edge1:输出边缘图像
     '''
-
-    # 读取图片并处理为灰度图
-    img = img.transpose(2,0,1)
-    img_gray = img[2::].squeeze()
-
-    # 生成梯度直方图
-    img_x = cv2.Sobel(img_gray,cv2.CV_64F,1,0,ksize=3)
-    img_y = cv2.Sobel(img_gray,cv2.CV_64F,0,1,ksize=3)
-
-    magnitude, angle = cv2.cartToPolar(img_x, img_y, 1)
-
-    return magnitude
-
+    blurred = cv.GaussianBlur(image, (3,3), 0)
+    # gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
+    # 求X方向上的梯度
+    grad_x = cv.Sobel(blurred, cv.CV_16SC1, 1, 0)
+    # 求y方向上的梯度
+    grad_y = cv.Sobel(blurred, cv.CV_16SC1, 0, 1)
+    # 将梯度值转化到8位上来
+    x_grad = cv.convertScaleAbs(grad_x)
+    y_grad = cv.convertScaleAbs(grad_y)
+    # 将两个梯度组合起来
+    src1 = cv.addWeighted(x_grad, 0.5, y_grad, 0.5, 0)
+    # 组合梯度用canny算法，其中50和100为阈值
+    edge = cv.Canny(src1, 0, 20)
+    # cv.imshow("Canny_edge_1", edge)
+    edge1 = cv.Canny(grad_x, grad_y, 10, 100)
+    # cv.imshow("Canny_edge_2", edge1)
+    # 用边缘做掩模，进行bitwise_and位运算
+    # edge2 = cv.bitwise_and(image, image, mask=edge1)
+    # cv.imshow("bitwise_and", edge2)
+    return edge1
