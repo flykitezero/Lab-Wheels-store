@@ -4,7 +4,6 @@
 特殊导入包：os,cv2
 提交日期：2021/7/21  
 # ------------------------------------------------  
-```ruby
 def JPG2GRAY(source_Dir, new_Dir):  
     '''  
     :param source_Dir: 要处理的文件夹路径  
@@ -29,7 +28,7 @@ def JPG2GRAY(source_Dir, new_Dir):
         # np.save(os.path.join(new_Dir,filename),img)
 
         print('处理成功')
-        ```
+
         
         
 # --------------------------------------        
