@@ -55,3 +55,30 @@ def Sobel(im):
     edge_detect = F.conv2d(Variable(im), weight)
 
     return edge_detect
+    
+    
+# --------------------------------------        
+提交人：SZ  
+功能简介：梯度直方图计算函数
+特殊导入包：import cv2
+提交日期：2021/8/3
+# ------------------------------------------------  
+def  gen_Gradient(img):
+    '''
+    梯度直方图计算
+    :param img: 输入3通道的图片
+    :return: magnitude:梯度直方图
+    '''
+
+    # 读取图片并处理为灰度图
+    img = img.transpose(2,0,1)
+    img_gray = img[2::].squeeze()
+
+    # 生成梯度直方图
+    img_x = cv2.Sobel(img_gray,cv2.CV_64F,1,0,ksize=3)
+    img_y = cv2.Sobel(img_gray,cv2.CV_64F,0,1,ksize=3)
+
+    magnitude, angle = cv2.cartToPolar(img_x, img_y, 1)
+
+    return magnitude
+
