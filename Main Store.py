@@ -10,7 +10,7 @@ def JPG2GRAY(source_Dir, new_Dir):
     :param new_Dir: 保存的路径  
     :return:无  
 
-
+    ···
     # 判断是否存在保存路径，不存在则新建
     if not os.path.exists(new_Dir):
         os.makedirs(new_Dir)
