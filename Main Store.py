@@ -91,3 +91,43 @@ def canny_edge(image):
     # edge2 = cv.bitwise_and(image, image, mask=edge1)
     # cv.imshow("bitwise_and", edge2)
     return edge1
+    
+    
+# --------------------------------------        
+提交人：SZ  
+功能简介：pickle文件创建 
+特殊导入包：
+import pickle
+from PIL import Image
+提交日期：2021/11/2  
+# ------------------------------------------------ 
+# 创建一个字典，包含图像数据和对应的标签，具体格式为dict{‘data’：dataList，‘labels’：labelsList}
+dictOfData = {}
+dataList = []
+labelList = []
+
+for label,dir_Name in enumerate(['./DMSS','./KC','./Plane','./TK','./ZZC']):# 枚举函数中放各类图像的文件夹
+    for filename in os.listdir(dir_Name):
+        # 打印文件名
+        print(filename)
+        # 读取图片
+        img = Image.open(os.path.join(dir_Name, filename))
+        img = np.array(img)
+        # 生成对应的label
+        img_label = label # 0代表地面设施,1代表卡车,以此类推
+        print(img_label)
+        # 将img放入list中
+        dataList.append(img)
+        # 将label放入list中
+        labelList.append(img_label)
+        # 打印list的长度
+        print(len(dataList))
+
+dictOfData['data'] = dataList
+dictOfData['labels'] = labelList
+
+# 获取输出文件，注，207文件需要提前创建
+output = open('./207_category_split_test.pickle','wb')
+print(output)
+# 存储pickle文件
+pickle.dump(dictOfData,output,0)
